@@ -1,2 +1,2 @@
-export * from "./webapi.ts"
-export * from "./eventsapi.ts"
+export * from "./webapi.ts";
+export * from "./eventsapi.ts";
