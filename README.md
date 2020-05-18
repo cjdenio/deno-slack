@@ -8,54 +8,49 @@ This module is **not done**, and isn't ready for any sort of production use.
 
 ## Stuff to do (before production)
 
-- [ ] Complete Web API support
+- [ ] Web API support
 - [x] Events API support
 - [ ] Interactivity API support
+- [x] Slash command support
 - [ ] RTM API support
-- [ ] Add middleware for more than just [`oak`](https://deno.land/x/oak)
+- [ ] Custom middleware
 
 ## Usage
 
-### Web API
+```ts
+import { App } from "https://raw.githubusercontent.com/deniosoftware/deno-slack/master/mod.ts";
 
-```javascript
-import { WebAPI } from "https://raw.githubusercontent.com/deniosoftware/deno-slack/master/mod.ts";
-
-// Pass a token into the constructor, or into individual API calls
-const slack = new WebAPI(Deno.env.get('slackToken'))
-
-// Post a message
-slack.chatPostMessage({
-    channel: "#general",
-    text: "Hello World!",
-    // Pass in a token
-    token: Deno.env.get('slackToken')
-}).then((resp) => {
-    // `resp` is the JSON-parsed response from Slack
-}).catch((err) => {
-    // `err` is the error code from Slack
-})
-```
-
-### Events API
-
-```javascript
-import { EventsAPI } from "https://raw.githubusercontent.com/deniosoftware/deno-slack/master/mod.ts";
-
-// You'll need to grab your Signing Secret from the Slack API dashboard
-const events = new EventsAPI(Deno.env.get('slackSigningSecret'));
-
-// Listen for a particular event
-events.listen("message", (d) => {
-    // `d` is the JSON-parsed request payload
+const app = new App({
+  signingSecret: Deno.env.get('slackSigningSecret'),
+  token: Deno.env.get('slackToken')
 });
 
-events.listen("*", (d) => {
-    // Listen for all events
-
-    // The event type is available under `d.event.type`
-    console.log(`Got event: ${d.event.type}`);
+// Listen for an event
+app.event("message", (event) => {
+  console.log("Message posted");
 });
 
-// `events.oakMiddleware()` is a middleware function for Oak that mounts on `/slack/events`
+app.event("reaction_added", (event) => {
+  console.log("Reaction added");
+});
+
+// Listen for all events
+app.event("*", (event) => {
+  console.log("Something happened.");
+});
+
+// Listen for a slash command
+app.command("test", (command, ack) => {
+  // Respond to the command
+  ack({
+      text: "Who hath awakened me?"
+  });
+});
+
+// Start the app on the specified port
+app.start(3000).then(() => {
+  // ...
+}).catch((e) => {
+  // Something went wrong
+});
 ```

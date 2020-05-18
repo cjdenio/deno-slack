@@ -20,7 +20,11 @@ export async function getBody(
   await serverRequest.body.read(rawBody);
 
   const textBody = new TextDecoder().decode(rawBody);
-  const jsonBody = JSON.parse(textBody);
+  var jsonBody;
+
+  try {
+    jsonBody = JSON.parse(textBody);
+  } catch (e) {}
 
   return { text: textBody, json: jsonBody };
 }
