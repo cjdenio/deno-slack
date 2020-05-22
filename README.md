@@ -12,6 +12,7 @@ This module is **not done**, and isn't ready for any sort of production use.
 - [x] Events API support
 - [ ] Interactivity API support
 - [x] Slash command support
+- [ ] Slash command payload parsing
 - [ ] RTM API support
 - [ ] Custom middleware
 
