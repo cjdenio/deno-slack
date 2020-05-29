@@ -83,7 +83,7 @@ export class App {
       ) {
         if (/\/slack\/events\/?$/i.test(req.url)) {
           this.handleRequestEvents(req, body);
-        } else if (/\/slack\/interactivity\/?/i.test(req.url)) {
+        } else if (/\/slack\/interactivity\/?$/i.test(req.url)) {
           this.handleRequestInteractivity(req, body);
         } else {
           this.handleRequestCommand(req, body);
